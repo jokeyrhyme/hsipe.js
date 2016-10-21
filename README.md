@@ -1,3 +1,89 @@
 # hsipe [![npm](https://img.shields.io/npm/v/hsipe.svg?maxAge=2592000)](https://www.npmjs.com/package/hsipe)
 
 Here's Something I Prepared Earlier (via detached child-process)
+
+
+## Usage
+
+I borrowed this idea by seeing how [update-notifier](https://github.com/yeoman/update-notifier) operates.
+
+The ideal use case is when you have a time-consuming asynchronous task
+(e.g. baking a cake, making an HTTP request, scanning a disk, etc),
+and you'd like to continue executing,
+even when those results are not ready yet.
+You assume that during a future execution of your script,
+you'll have access to the results of that previous run.
+
+
+### `putInOven(options: HSIPEOptions, ...args: any[])`
+
+```flowtype
+type HSIPEOptions = {
+  cakeName: string,
+  bakePath: string,
+}
+```
+
+-   **bakePath** is a path to a module that exports a BakeFunction named "bake"
+
+```flowtype
+type BakeFunction = (options: BakeOptions, ...args: any[]) => Promise<void>
+type BakeOptions = {
+  conf: Conf
+}
+```
+
+-   see upstream [Conf](https://github.com/sindresorhus/conf) for more details
+
+
+### Example
+
+index.js / cli.js (your entry-point):
+
+```js
+const path = require('path')
+
+const Conf = require('conf')
+const { putInOven } = require('hsipe')
+
+const configName = 'strawberry-shortcake'
+const conf = new Conf({ configName })
+
+// start baking our strawberry-shortcake
+putInOven({ bakePath: path.join(__dirname, 'bake.js') })
+
+// try to continue on, in case we already started baking last time
+const flavour = conf.get('flavour')
+
+if (flavour) {
+  // yay, we must have prepared something earlier
+  // TODO: eat cake, enjoy flavour
+} else {
+  // ah, this must be our first time through here
+  // better luck next time!
+  // TODO: do something that doesn't require eating delicious cake
+}
+```
+
+bake.js:
+
+```js
+function bake ({ conf }, ...args) {
+  // e.g. something that can take a while to finish
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      conf.set('flavour', 'delicious')
+      resolve()
+    }, 5e3)
+  })
+}
+
+module.exports = { bake }
+```
+
+
+### See Also
+
+-   [conf](https://github.com/sindresorhus/conf)
+
+-   [update-notifier](https://github.com/yeoman/update-notifier)
