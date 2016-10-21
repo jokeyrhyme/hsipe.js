@@ -10,11 +10,20 @@
     "eslint-plugin-promise": "^3.3.0",
     "eslint-plugin-standard": "^2.0.1",
     "fixpack": "^2.3.1",
-    "flow-bin": "^0.33.0"
+    "flow-bin": "^0.33.0",
+    "jest": "^16.0.2"
   },
   "engines": {
     "node": ">=4",
     "npm": ">=2"
+  },
+  "jest": {
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "lines": 90
+      }
+    }
   },
   "keywords": [
     "child-process",
@@ -31,7 +40,9 @@
   "scripts": {
     "eslint": "eslint --fix --cache .",
     "fixpack": "fixpack",
-    "flow_check": "flow check || exit 0",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "flow_check": "flow check",
+    "jest": "jest",
+    "posttest": "npm run eslint && npm run flow_check && npm run fixpack",
+    "test": "npm run jest"
   }
 }

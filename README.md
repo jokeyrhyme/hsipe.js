@@ -82,6 +82,18 @@ module.exports = { bake }
 ```
 
 
+## Contributing
+
+### Development
+
+```sh
+npm install --global flow-typed
+npm install
+flow-typed install
+npm test
+```
+
+
 ### See Also
 
 -   [conf](https://github.com/sindresorhus/conf)
