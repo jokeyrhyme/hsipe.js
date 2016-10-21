@@ -42,7 +42,7 @@ type BakeOptions = {
 
 ### Example
 
-index.js / cli.js (your entry-point):
+[index.js](./example/index.js) / cli.js (your entry-point):
 
 ```js
 const path = require('path')
@@ -50,11 +50,11 @@ const path = require('path')
 const Conf = require('conf')
 const { putInOven } = require('hsipe')
 
-const configName = 'strawberry-shortcake'
-const conf = new Conf({ configName })
+const cakeName = 'strawberry-shortcake'
+const conf = new Conf({ configName: cakeName })
 
 // start baking our strawberry-shortcake
-putInOven({ bakePath: path.join(__dirname, 'bake.js') })
+putInOven({ bakePath: path.join(__dirname, 'bake.js'), cakeName })
 
 // try to continue on, in case we already started baking last time
 const flavour = conf.get('flavour')
@@ -69,7 +69,7 @@ if (flavour) {
 }
 ```
 
-bake.js:
+[bake.js](./example/bake.js):
 
 ```js
 function bake ({ conf }, ...args) {
