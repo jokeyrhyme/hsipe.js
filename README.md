@@ -19,12 +19,16 @@ you'll have access to the results of that previous run.
 
 ```flowtype
 type HSIPEOptions = {
-  cakeName: string,
   bakePath: string,
+  cakeName: string
 }
 ```
 
 -   **bakePath** is a path to a module that exports a BakeFunction named "bake"
+
+-   **cakeName** is a unique identifier for the background work,
+  and scripts that use the same results can share this
+
 
 ```flowtype
 type BakeFunction = (options: BakeOptions, ...args: any[]) => Promise<void>
