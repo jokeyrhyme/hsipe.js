@@ -43,3 +43,19 @@ test('putInOven({ bakePath, cakeName })', () => {
       expect(typeof conf.get('lastBaked')).toEqual('number')
     })
 })
+
+test('putInOven({ bakePath, cakeName }, ...args)', () => {
+  const bakePath = fixturePath('bake-function-args')
+  const customArg1 = 'hello'
+  const customArg2 = 123
+  expect(() => {
+    putInOven({ bakePath, cakeName }, customArg1, customArg2)
+  }).not.toThrow()
+  expect(conf.get('lastBaked')).toBeUndefined()
+  return delay(250)
+    .then(() => {
+      expect(conf.get('customArg1')).toEqual(customArg1)
+      expect(conf.get('customArg2')).toEqual(customArg2)
+      expect(typeof conf.get('lastBaked')).toEqual('number')
+    })
+})
