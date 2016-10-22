@@ -1,6 +1,11 @@
 /* @flow */
 'use strict'
 
+const path = require('path')
+const spawn = require('child_process').spawn
+
+const Conf = require('conf')
+
 /* ::
 export type HSIPEOptions = {
   bakePath: string,
@@ -19,10 +24,6 @@ function isValidString (string) {
   return typeof string === 'string' && string
 }
 
-function isValidInterval (interval) {
-  return typeof interval === 'number' && Number.isFinite(interval)
-}
-
 function putInOven (options /* : HSIPEOptions */) {
   if (!options || typeof options !== 'object') {
     throw new TypeError('options object is mandatory')
@@ -31,12 +32,36 @@ function putInOven (options /* : HSIPEOptions */) {
   const bakePath = options.bakePath
   const cakeName = options.cakeName
 
+  const conf = new Conf({ configName: cakeName, projectName: 'hsipe' })
+
   if (!isValidString(bakePath) || !isValidString(cakeName)) {
     throw new TypeError('bakePath and cakeName strings are mandatory')
   }
 
-  // const interval = isValidInterval(options.interval) ? options.interval : ONE_DAY
-  // const args = arguments.slice(1)
+  let interval
+  if (typeof options.interval === 'number' && Number.isFinite(options.interval)) {
+    interval = options.interval
+  } else {
+    interval = ONE_DAY
+  }
+  const args = Array.prototype.slice.call(arguments, 1)
+
+  // Only check for updates on a set interval
+  if (Date.now() - conf.get('lastBaked') < interval) {
+    return
+  }
+
+  const spawnPath = path.join(__dirname, 'lib', 'start-baking.js')
+  const child = spawn(
+    process.execPath,
+    [ spawnPath, JSON.stringify([ options, args ]) ],
+    {
+      detached: true,
+      stdio: 'ignore'
+    }
+  )
+  // $FlowFixMe: there definitely _is_ an unref() method
+  child.unref()
 }
 
 module.exports = {

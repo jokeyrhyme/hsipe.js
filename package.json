@@ -21,13 +21,18 @@
     "node": ">=4",
     "npm": ">=2"
   },
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "jest": {
     "collectCoverage": true,
     "coverageThreshold": {
       "global": {
         "lines": 90
       }
-    }
+    },
+    "testRegex": "/__tests__/[^\\/]*\\.js$"
   },
   "keywords": [
     "child-process",
