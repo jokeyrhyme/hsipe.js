@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "Ron Waldon <jokeyrhyme@gmail.com> (https://github.com/jokeyrhyme)",
   "dependencies": {
-    "conf": "0.11.2"
+    "conf": "^0.11.2"
   },
   "devDependencies": {
     "eslint": "^3.8.1",
