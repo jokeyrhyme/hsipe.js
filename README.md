@@ -20,7 +20,8 @@ you'll have access to the results of that previous run.
 ```flowtype
 type HSIPEOptions = {
   bakePath: string,
-  cakeName: string
+  cakeName: string,
+  interval?: number
 }
 ```
 
@@ -28,6 +29,9 @@ type HSIPEOptions = {
 
 -   **cakeName** is a unique identifier for the background work,
   and scripts that use the same results can share this
+
+-   **interval** is the milliseconds to wait after a successful baking,
+  to throttle your time-consuming task (default = 1 day)
 
 
 ```flowtype
@@ -38,6 +42,8 @@ type BakeOptions = {
 ```
 
 -   see upstream [Conf](https://github.com/sindresorhus/conf) for more details
+
+-   when your BakeFunction resolves, we automatically set "lastBaked" value in `conf` for you (used when checking **interval**)
 
 
 ### Example
