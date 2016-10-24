@@ -4,17 +4,21 @@
 const path = require('path')
 const spawn = require('child_process').spawn
 
-const Conf = require('conf')
+const cake = require('./lib/cake.js')
 
 /* ::
-export type HSIPEOptions = {
+export type OvenOptions = {
   bakePath: string,
   cakeName: string,
   interval?: number
 }
+export type Cake = {
+  lastBaked?: number,
+  [id:string]: any
+}
 export type BakeFunction = (options: BakeOptions, ...args: any[]) => Promise<void>
 export type BakeOptions = {
-  conf: { [id:string]: any }
+  cake: Cake
 }
 */
 
@@ -24,7 +28,7 @@ function isValidString (string) {
   return typeof string === 'string' && string
 }
 
-function putInOven (options /* : HSIPEOptions */) {
+function putInOven (options /* : OvenOptions */) {
   if (!options || typeof options !== 'object') {
     throw new TypeError('options object is mandatory')
   }
@@ -32,7 +36,7 @@ function putInOven (options /* : HSIPEOptions */) {
   const bakePath = options.bakePath
   const cakeName = options.cakeName
 
-  const conf = new Conf({ configName: cakeName, projectName: 'hsipe' })
+  const conf = cake.getConf({ cakeName })
 
   if (!isValidString(bakePath) || !isValidString(cakeName)) {
     throw new TypeError('bakePath and cakeName strings are mandatory')
@@ -65,5 +69,6 @@ function putInOven (options /* : HSIPEOptions */) {
 }
 
 module.exports = {
+  getCake: cake.getCake,
   putInOven
 }

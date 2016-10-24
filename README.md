@@ -15,13 +15,18 @@ You assume that during a future execution of your script,
 you'll have access to the results of that previous run.
 
 
-### `putInOven(options: HSIPEOptions, ...args: any[])`
+### `putInOven(options: OvenOptions, ...args: any[])`
 
 ```flowtype
-type HSIPEOptions = {
+type OvenOptions = {
   bakePath: string,
   cakeName: string,
   interval?: number
+}
+
+type Cake = {
+  lastBaked?: number,
+  [id:string]: any
 }
 ```
 
@@ -35,15 +40,31 @@ type HSIPEOptions = {
 
 
 ```flowtype
-type BakeFunction = (options: BakeOptions, ...args: any[]) => Promise<void>
+type BakeFunction = (...args: any[]) => Promise<Cake>
 type BakeOptions = {
-  conf: Conf
+  cake: Cake
 }
 ```
 
--   see upstream [Conf](https://github.com/sindresorhus/conf) for more details
+-   your `BakeFunction` has access to the previous `Cake`,
+  which could be useful for more-efficient / partial baking
 
--   when your BakeFunction resolves, we automatically set "lastBaked" value in `conf` for you (used when checking **interval**)
+-   your `BakeFunction` resolves with your `Cake`,
+  and we automatically set "lastBaked" value in the `Cake` for you
+  (used when checking **interval**)
+
+
+### `getCake(options: CakeOptions) => Cake`
+
+```flowtype
+type CakeOptions = {
+  cakeName: string
+}
+```
+
+-   **cakeName** must be the same cake that you `putInOven()` earlier
+
+-   returns your **Cake** if it's ready (you'll have to check)
 
 
 ### Example
@@ -54,16 +75,16 @@ type BakeOptions = {
 const path = require('path')
 
 const Conf = require('conf')
-const { putInOven } = require('hsipe')
+const { getCake, putInOven } = require('hsipe')
 
 const cakeName = 'strawberry-shortcake'
-const conf = new Conf({ configName: cakeName })
 
 // start baking our strawberry-shortcake
 putInOven({ bakePath: path.join(__dirname, 'bake.js'), cakeName })
 
 // try to continue on, in case we already started baking last time
-const flavour = conf.get('flavour')
+const cake = getCake({ cakeName })
+const flavour = cake.flavour
 
 if (flavour) {
   // yay, we must have prepared something earlier
@@ -78,12 +99,11 @@ if (flavour) {
 [bake.js](./example/bake.js):
 
 ```js
-function bake ({ conf }, ...args) {
+function bake ({ cake }, ...args) {
   // e.g. something that can take a while to finish
   return new Promise((resolve) => {
     setTimeout(() => {
-      conf.set('flavour', 'delicious')
-      resolve()
+      resolve({ flavour: delicious })
     }, 5e3)
   })
 }
