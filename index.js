@@ -12,9 +12,13 @@ export type OvenOptions = {
   cakeName: string,
   interval?: number
 }
+export type Cake = {
+  lastBaked?: number,
+  [id:string]: any
+}
 export type BakeFunction = (options: BakeOptions, ...args: any[]) => Promise<void>
 export type BakeOptions = {
-  conf: { [id:string]: any }
+  cake: Cake
 }
 */
 

@@ -23,6 +23,11 @@ type OvenOptions = {
   cakeName: string,
   interval?: number
 }
+
+type Cake = {
+  lastBaked?: number,
+  [id:string]: any
+}
 ```
 
 -   **bakePath** is a path to a module that exports a BakeFunction named "bake"
@@ -35,15 +40,18 @@ type OvenOptions = {
 
 
 ```flowtype
-type BakeFunction = (options: BakeOptions, ...args: any[]) => Promise<void>
+type BakeFunction = (...args: any[]) => Promise<Cake>
 type BakeOptions = {
-  conf: Conf
+  cake: Cake
 }
 ```
 
--   see upstream [Conf](https://github.com/sindresorhus/conf) for more details
+-   your `BakeFunction` has access to the previous `Cake`,
+  which could be useful for more-efficient / partial baking
 
--   when your BakeFunction resolves, we automatically set "lastBaked" value in the cake for you (used when checking **interval**)
+-   your `BakeFunction` resolves with your `Cake`,
+  and we automatically set "lastBaked" value in the `Cake` for you
+  (used when checking **interval**)
 
 
 ### `getCake(options: CakeOptions) => Cake`
@@ -51,11 +59,6 @@ type BakeOptions = {
 ```flowtype
 type CakeOptions = {
   cakeName: string
-}
-
-type Cake = {
-  lastBaked?: number,
-  [id:string]: any
 }
 ```
 
@@ -96,12 +99,11 @@ if (flavour) {
 [bake.js](./example/bake.js):
 
 ```js
-function bake ({ conf }, ...args) {
+function bake ({ cake }, ...args) {
   // e.g. something that can take a while to finish
   return new Promise((resolve) => {
     setTimeout(() => {
-      conf.set('flavour', 'delicious')
-      resolve()
+      resolve({ flavour: delicious })
     }, 5e3)
   })
 }
