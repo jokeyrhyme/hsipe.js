@@ -103,7 +103,7 @@ function bake ({ cake }, ...args) {
   // e.g. something that can take a while to finish
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve({ flavour: delicious })
+      resolve({ flavour: 'delicious' })
     }, 5e3)
   })
 }
