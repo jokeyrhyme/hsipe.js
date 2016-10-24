@@ -4,6 +4,9 @@
 ## Unreleased
 
 
+## 2.0.0 - 2016-10-25
+
+
 ### Added
 
 -   new `getCake()` function to reduce confusion (#1)
