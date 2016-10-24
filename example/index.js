@@ -3,11 +3,10 @@
 
 const path = require('path')
 
-const Conf = require('conf')
+const getCake = require('../index.js').getCake
 const putInOven = require('../index.js').putInOven
 
 const cakeName = 'strawberry-shortcake'
-const conf = new Conf({ configName: cakeName })
 
 // start baking our strawberry-shortcake
 putInOven({
@@ -16,7 +15,8 @@ putInOven({
 })
 
 // try to continue on, in case we already started baking last time
-const flavour = conf.get('flavour')
+const cake = getCake({ cakeName })
+const flavour = cake.flavour
 
 if (flavour) {
   // yay, we must have prepared something earlier
