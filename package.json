@@ -1,7 +1,7 @@
 {
   "name": "hsipe",
   "description": "Here's Something I Prepared Earlier (via detached child-process)",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Ron Waldon <jokeyrhyme@gmail.com> (https://github.com/jokeyrhyme)",
   "bugs": {
     "url": "https://github.com/jokeyrhyme/hsipe.js/issues"
