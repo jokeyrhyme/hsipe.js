@@ -64,7 +64,6 @@ function putInOven (options /* : OvenOptions */) {
       stdio: 'ignore'
     }
   )
-  // $FlowFixMe: there definitely _is_ an unref() method
   child.unref()
 }
 
