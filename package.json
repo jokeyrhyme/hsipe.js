@@ -38,7 +38,8 @@
       "global": {
         "lines": 90
       }
-    }
+    },
+    "testRegex": "/__tests__/[^\\/]*\\.js$"
   },
   "keywords": [
     "child-process",
