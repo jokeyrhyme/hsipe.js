@@ -1,47 +1,7 @@
 {
   "name": "hsipe",
-  "description": "Here's Something I Prepared Earlier (via detached child-process)",
   "version": "2.0.1",
-  "author": "Ron Waldon <jokeyrhyme@gmail.com> (https://github.com/jokeyrhyme)",
-  "bugs": {
-    "url": "https://github.com/jokeyrhyme/hsipe.js/issues"
-  },
-  "dependencies": {
-    "conf": "^1.0.0"
-  },
-  "devDependencies": {
-    "eslint": "^4.0.0",
-    "eslint-config-standard": "^10.0.0",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-node": "^5.0.0",
-    "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.0",
-    "fixpack": "^2.3.1",
-    "flow-bin": "^0.53.0",
-    "idempotent-fs": "^1.1.0",
-    "jest": "^20.0.0"
-  },
-  "directories": {
-    "example": "example"
-  },
-  "engines": {
-    "node": ">=4",
-    "npm": ">=2"
-  },
-  "files": [
-    "index.js",
-    "lib"
-  ],
-  "homepage": "https://github.com/jokeyrhyme/hsipe.js#readme",
-  "jest": {
-    "collectCoverage": true,
-    "coverageThreshold": {
-      "global": {
-        "lines": 90
-      }
-    },
-    "testRegex": "/__tests__/[^\\/]*\\.js$"
-  },
+  "description": "Here's Something I Prepared Earlier (via detached child-process)",
   "keywords": [
     "child-process",
     "detached",
@@ -52,19 +12,67 @@
     "process",
     "something"
   ],
+  "homepage": "https://github.com/jokeyrhyme/hsipe.js#readme",
+  "bugs": {
+    "url": "https://github.com/jokeyrhyme/hsipe.js/issues"
+  },
   "license": "MIT",
+  "author": "Ron Waldon <jokeyrhyme@gmail.com> (https://github.com/jokeyrhyme)",
+  "files": [
+    "index.js",
+    "lib"
+  ],
   "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "example": "example"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jokeyrhyme/hsipe.js.git"
   },
   "scripts": {
     "eslint": "eslint --fix --cache .",
-    "fixpack": "fixpack",
-    "flow_check": "flow check",
+    "flow": "npx -q flow-bin@^0.54.1 check",
     "jest": "jest",
-    "posttest": "npm run eslint && npm run flow_check",
-    "pretest": "npm run fixpack",
-    "test": "npm run jest"
+    "nsp": "npx -q nsp check",
+    "sort-package-json": "npx -q sort-package-json",
+    "pretest": "npm run prettier && npm run eslint && npm run sort-package-json",
+    "test": "npm run jest && npm run nsp && npm run flow",
+    "prettier": "npx -q prettier --list-different --write \"{,!(build|coverage|dist|flow-typed|typings|vendor)/**/}*.{css,js,jsx,less,scss,ts,tsx}\" || exit 0"
+  },
+  "dependencies": {
+    "conf": "^1.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-node": "^5.0.0",
+    "eslint-plugin-promise": "^3.5.0",
+    "idempotent-fs": "^1.1.0",
+    "jest": "^21.1.0",
+    "npx": "^9.6.0"
+  },
+  "engines": {
+    "node": ">=4",
+    "npm": ">=2"
+  },
+  "eslintIgnore": [
+    "flow-typed",
+    ".eslintcache",
+    "coverage"
+  ],
+  "jest": {
+    "collectCoverage": true,
+    "coverageThreshold": {
+      "global": {
+        "lines": 90
+      }
+    },
+    "testRegex": "/__tests__/[^\\/]*\\.js$"
+  },
+  "prettier": {
+    "singleQuote": true,
+    "trailingComma": "es5"
   }
 }
