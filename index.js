@@ -1,10 +1,10 @@
 /* @flow */
-'use strict'
+'use strict';
 
-const path = require('path')
-const spawn = require('child_process').spawn
+const path = require('path');
+const spawn = require('child_process').spawn;
 
-const cake = require('./lib/cake.js')
+const cake = require('./lib/cake.js');
 
 /* ::
 export type OvenOptions = {
@@ -22,52 +22,55 @@ export type BakeOptions = {
 }
 */
 
-const ONE_DAY = 7 * 24 * 60 * 60 * 1000
+const ONE_DAY = 7 * 24 * 60 * 60 * 1000;
 
-function isValidString (string) {
-  return typeof string === 'string' && string
+function isValidString(string) {
+  return typeof string === 'string' && string;
 }
 
-function putInOven (options /* : OvenOptions */) {
+function putInOven(options /* : OvenOptions */) {
   if (!options || typeof options !== 'object') {
-    throw new TypeError('options object is mandatory')
+    throw new TypeError('options object is mandatory');
   }
 
-  const bakePath = options.bakePath
-  const cakeName = options.cakeName
+  const bakePath = options.bakePath;
+  const cakeName = options.cakeName;
 
-  const conf = cake.getConf({ cakeName })
+  const conf = cake.getConf({ cakeName });
 
   if (!isValidString(bakePath) || !isValidString(cakeName)) {
-    throw new TypeError('bakePath and cakeName strings are mandatory')
+    throw new TypeError('bakePath and cakeName strings are mandatory');
   }
 
-  let interval
-  if (typeof options.interval === 'number' && Number.isFinite(options.interval)) {
-    interval = options.interval
+  let interval;
+  if (
+    typeof options.interval === 'number' &&
+    Number.isFinite(options.interval)
+  ) {
+    interval = options.interval;
   } else {
-    interval = ONE_DAY
+    interval = ONE_DAY;
   }
-  const args = Array.prototype.slice.call(arguments, 1)
+  const args = Array.prototype.slice.call(arguments, 1);
 
   // Only check for updates on a set interval
   if (Date.now() - conf.get('lastBaked') < interval) {
-    return
+    return;
   }
 
-  const spawnPath = path.join(__dirname, 'lib', 'start-baking.js')
+  const spawnPath = path.join(__dirname, 'lib', 'start-baking.js');
   const child = spawn(
     process.execPath,
-    [ spawnPath, JSON.stringify([ options, args ]) ],
+    [spawnPath, JSON.stringify([options, args])],
     {
       detached: true,
-      stdio: 'ignore'
+      stdio: 'ignore',
     }
-  )
-  child.unref()
+  );
+  child.unref();
 }
 
 module.exports = {
   getCake: cake.getCake,
-  putInOven
-}
+  putInOven,
+};
