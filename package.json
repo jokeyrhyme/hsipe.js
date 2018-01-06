@@ -17,7 +17,7 @@
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.0",
     "fixpack": "^2.3.1",
-    "flow-bin": "^0.53.0",
+    "flow-bin": "^0.63.1",
     "idempotent-fs": "^1.1.0",
     "jest": "^21.2.0"
   },
